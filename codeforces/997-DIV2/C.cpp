@@ -26,12 +26,9 @@ int const MAX5 = 100000, MAX6 = 1000000;
 void Solution(){
   int n; cin >> n;
   /*
-  n => a n-sized array 1 <= ai <= n and g(a) > n
-  n = 6 => 1 1 2 3 1 2 (f(a) = 3)
-  planidrome subseq = 1 1 1, 1 2 1, 1 3 1, 1 2 1, 1 3 1, 2 1 2, 2 3 2 => g(a) = 7
-  idea : force f(a) = 3 and somehow make g(a) > n
-  1 1 2 3 1 2 2 3 4 3 pttern?
-  1, 2, 3, ..., n-2, 1, 2 => 2*(n-3) > n for n > 6
+  all odd subarrays are good
+  can we know the median without sorting????
+  even 
   */
 
   if(n == 6)
