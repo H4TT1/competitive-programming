@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cstring>
 #include <utility>
- 
+
 #define F first
 #define S second
 #define pb push_back
@@ -14,77 +14,54 @@
 #define vi vector<int>
 #define vii vector<pair<int,int>>
 #define pi pair<int,int>
- 
+
 using namespace std;
 #define ll long long
 int const MAX5 = 100000, MAX6 = 1000000;
-/*
- 
-*/
-//printf("%.10lf\n",ans);
-//cout<<fixed<<setprecision(20)<<ans<<endl;
-//stoll string -> long long
-
 
 void Solution(){
-  int n; cin >> n;
-  // O(n²) is possible
-  int a[n + 1], c[n + 1];
-  for(int i = 1; i <= n; i++) cin >> c[i], a[i] = i;
-  bool overtaked[n+1][n+1];
-  memset(overtaked, 0, sizeof(overtaked));
+    int n; cin >> n;
+    vi v(n);
+    for(int i = 0; i < n; i++) cin >> v[i];
 
-  vii overtakes;
+    vii Ans;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j < i; j++)
+            Ans.pb({i, j});
 
-  for(int i = n; i >= 1; i--){
-    for(int j = 1; j <= n; j++){
-      if(c[i] == a[j]){
-        while(j+1 <= n && j != i){
-          overtaked[a[j+1]][a[j]] = true;
-          swap(a[j], a[j+1]);
-          overtakes.pb(make_pair(a[j], a[j+1]));
-          j++;
+    vi a;
+    for(int i = n; i >= 1; i--)
+        a.pb(i);
+
+    for(int i = 0; i < n; i++){
+        int in = -1;
+        for(int j = i + 1; j < n; j++){
+            if(v[i] == a[j]){
+                in = j;
+                break;
+            }
         }
-        vii tmp;
-        
-        while(j != n  && !overtaked[a[j+1]][a[j]] && !overtaked[a[j]][a[j+1]]){
-          overtakes.pb(make_pair(a[j+1], a[j]));
-          tmp.pb(make_pair(a[j], a[j+1]));
-          j++;
+
+        for(int j = in; j > i; j--){
+            Ans.pb({v[i], a[j - 1]});
+            a[j] = a[j - 1];
         }
-        
-        
-        for(int k = tmp.size()-1; k >= 0; k--){
-          overtakes.pb(tmp[k]);
-        }
-        
-        break;
-      }
+
+        a[i] = v[i];
     }
-  }
 
-  cout << overtakes.size() << endl;
-  for(auto p : overtakes){
-    cout << p.F << " " << p.S << endl;
-  }
-
+    cout << Ans.size() << endl;
+    for(auto i : Ans)
+        cout << i.F << " " << i.S << endl;
 }
 
 int main(){
-  // in & out files
-  /*
-  freopen("outofplace.in", "r", stdin);
-  freopen("outofplace.out", "w", stdout);
-*/
-  // fast and furious io
-  ios_base::sync_with_stdio(false);
-  cin.tie(0);
-  cout.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-// testcases
-  int t = 1; // cin >> t; 
-  while(t--)
-    Solution();
-  return 0;
-
+    int t = 1;
+    while(t--)
+        Solution();
+    return 0;
 }
