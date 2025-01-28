@@ -11,6 +11,7 @@
 #define vi vector<int>
 #define vii vector<pair<int,int>>
 #define pi pair<int,int>
+#define vll vector<ll>
 
 using namespace std;
 #define ll long long
