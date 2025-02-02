@@ -1,4 +1,5 @@
 
 
 ultimate topic list : https://youkn0wwho.academy/topic-list
-nice blog : https://codeforces.com/blog/entry/23054
+nice blogs : https://codeforces.com/blog/entry/23054
+             https://codeforces.com/blog/entry/111622
