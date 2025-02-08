@@ -23,11 +23,11 @@ int const MAX5 = 100000, MAX6 = 1000000;
 //stoll string -> long long
 
 
-void Solution(){
-  ll n, k; cin >> n >> k;
+void solve(){
+  int n, k; cin >> n >> k;
   string s, t; cin >> s >> t;
 
-  ll freq[26] = {0};
+  int freq[26] = {0};
   // int freq_t[26] = {0};
 
   for(int i = 0; i < n; i++){
@@ -39,17 +39,15 @@ void Solution(){
       cout << "NO" << endl;
       return;
     }
-  }
-  if(n >= 2*k) cout << "YES" << endl;
-  else{
-    for(int i = n-k; i < k; i++){
-      if(s[i] != t[i]){
-        cout << "NO" << endl;
-        return;
-      }
+  } 
+  for(int i = max(n - k,0); i < min(k,n); i++){
+    if(s[i] != t[i]){
+      cout << "NO" << endl;
+      // cout << s[i] << " " << t[i] << endl;
+      return;
     }
-    cout << "YES" << endl;
   }
+  cout << "YES" << endl;
 }
 
 int main(){
@@ -66,7 +64,7 @@ int main(){
 // testcases
   int t = 1; cin >> t; 
   while(t--)
-    Solution();
+    solve();
   return 0;
 
 }
