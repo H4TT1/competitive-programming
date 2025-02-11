@@ -4,3 +4,5 @@ ultimate topic list : https://youkn0wwho.academy/topic-list
 nice blogs : https://codeforces.com/blog/entry/23054
              https://codeforces.com/blog/entry/111622
 yt channels : Errichto, Colin galen
+
+https://ancc-iitd.github.io/competitive-programming-resources/
