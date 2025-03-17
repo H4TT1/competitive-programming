@@ -29,8 +29,10 @@ int const MAX5 = 100000, MAX6 = 1000000;
 //cout<<fixed<<setprecision(20)<<ans<<endl;
 //stoll string -> long long
 int parent[1001];
+int size[1001];
 void make_set(int v) {
   parent[v] = v;
+  size[v] = 1;
 }
 
 int find_set(int v) {
@@ -42,13 +44,31 @@ int find_set(int v) {
 void union_sets(int a, int b) {
   a = find_set(a);
   b = find_set(b);
-  if (a != b)
+  if (a != b){
       parent[b] = a;
+      size[a] += size[b];
+  }
+}
+
+int calc_size(int a){
+  a = find_set(a);
+  return size[a];
 }
 
 
 void solve(){
   int n, d; cin >> n >> d;
+  vector<pair<int,int>> conds;
+  int x, y; 
+  // memset(size, 0, sizeof(size));
+  for(int i = 0; i < d; i++){
+    cin >> x >> y;
+    make_set(x);
+    make_set(y);
+    conds.pb({x, y});
+    union_sets(x, y);
+
+  }
 
 }
 
