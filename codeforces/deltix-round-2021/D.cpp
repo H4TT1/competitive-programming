@@ -60,7 +60,7 @@ void solve(){
   int n, d; cin >> n >> d;
   vector<pair<int,int>> conds;
   int x, y; 
-  // memset(size, 0, sizeof(size));
+  memset(size, 0, sizeof(size));
   for(int i = 0; i < d; i++){
     cin >> x >> y;
     make_set(x);
