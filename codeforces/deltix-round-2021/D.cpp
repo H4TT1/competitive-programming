@@ -18,12 +18,6 @@ using namespace std;
 int const MAX5 = 100000, MAX6 = 1000000;
 /*
 
-- leafs have deg = 1 => they can be defined by their neighbor
-- the last node(s) ??
-
-
- jsut implemented te solution for this one even though it was Ez (sad noises)
- 
 */
 //printf("%.10lf\n",ans);
 //cout<<fixed<<setprecision(20)<<ans<<endl;
