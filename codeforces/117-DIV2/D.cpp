@@ -30,26 +30,20 @@ int const MAX5 = 100000, MAX6 = 1000000;
 
 
 /*
-  BRBR
-  9 3 5 4
-  prefix on penality => 9 
+
 
 */
 
-bool check(ll a, ll b, ll x){
-  if(a == x or b == x) return true;
-  if(a < b) swap(a, b);
-  if(b > a - b) b = a - b;
-  if(x > max(a, b) or a == 0 or b == 0) return false;
-  ll cnt = max(1ll, (a - max(x, b)) / (2 * b));
-  return check(a - b * cnt, b, x);
-}
-
 void solve(){
+    int n; cin >> n;
+    int a[n], b[n];
+    for(int i = 0; i < n; i++) cin >> a[i] >> b[i];
 
-  ll a, b, x; cin >> a >> b >> x;
-  cout << (check(a, b, x) ? "YES" : "NO") << endl; 
-
+    // bin search again <3
+    int l = 0, r = n;
+    while(l <= r){
+        int mid = (l + r) / 2;
+    }
 }
 
 int main(){

@@ -61,7 +61,6 @@ void solve(){
     make_set(y);
     conds.pb({x, y});
     union_sets(x, y);
-
   }
 
 }
