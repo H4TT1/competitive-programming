@@ -23,36 +23,34 @@ int const MAX5 = 100000, MAX6 = 1000000;
 */
 vector<int> adj[MAX5 + 1];
 int visited[MAX5 + 1];
-vector<int> cycle;
+vector<int> order;
+vector<int> ans;
 int parent[MAX5 + 1];
+int cycle_start = -1, cycle_end;
 
-void detect_cycle(int u, int prev){
-  if(visited[u]) return;
+bool detect_cycle(int u, int prev){
+  // cout << u << " " << prev << endl;
   visited[u] = 1;
-  parent[u] = prev;
   for(auto v : adj[u]){
-    // cout << "hi" << endl;
-    // cout << u << " " << v << endl;
-    if(visited[v] && v != prev){
-      cycle.pb(v);
-      cycle.pb(u);
-      u = prev;
-      while(u != v and u != -1){
-        cycle.pb(u);
-        u = parent[u];
+    if(v != prev){
+      if(visited[v]){
+        cycle_end = u;
+        cycle_start = v;
+        return true;
       }
-      return;
-    }
-    else if(v != prev){
-      detect_cycle(v, u);
+      parent[v] = u;
+      if(detect_cycle(v, parent[v]))
+        return true;
     }
   }
+  return false;
 }
 
 void solve(){
   int n, m; cin >> n >> m;
   
   memset(visited, 0, sizeof(visited));
+  memset(parent, -1, sizeof(parent));
   
   for(int i = 0; i < m; i++){
     int a, b; cin >> a >> b;
@@ -61,14 +59,24 @@ void solve(){
   }
 
   for(int i = 1; i <= n; i++){
-    if(!visited[i]){
-      detect_cycle(i, -1);
-      if(cycle.size()){
-        cout << cycle.size() << endl;
-        for(auto x : cycle) cout << x << " ";
-        cout << endl;
-        return;
+    if(!visited[i] && detect_cycle(i, parent[i])){
+      // cout << cycle_start << " " << cycle_end << endl;
+      // return;
+      vector<int> cycle;
+      // for(int i = 1; i <= n; i++) cout << parent[i] << " ";
+      // cout << endl;
+      cycle.push_back(cycle_start);
+      for (int v = cycle_end; v != cycle_start; v = parent[v]){
+            //cout << v << " " << parent[v] << endl; 
+            cycle.push_back(v);
+            //cout << "hihi" << endl;
       }
+      cycle.push_back(cycle_start);
+
+      cout << cycle.size() << endl;
+      for(auto x : cycle) cout << x << " ";
+      cout << endl;
+      return;
     }
   }
   cout << "IMPOSSIBLE" << endl;
