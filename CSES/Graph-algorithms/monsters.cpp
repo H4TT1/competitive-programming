@@ -34,6 +34,7 @@ bool isFloor(int x, int y, string grid[]){
   return grid[x][y] == '.';
 }
  
+
 void solve(){
   cin >> n >> m;
   string grid[n];
