@@ -1,162 +1,95 @@
-#include <bits/stdc++.h>
- 
-#define F first
-#define S second
-#define pb push_back
-#define pf push_front
-#define popf pop_front
-#define popb pop_back
-#define MOD 1000000007
-#define MOD2 998244353
-#define vi vector<int>
-#define vii vector<pair<int,int>>
-#define pi pair<int,int>
- 
+#include <algorithm>
+#include <climits>
+#include <cstring>
+#include <iostream>
+#include <queue>
+#include <vector>
+#define pii pair<int, int>
+#define mn 1005
 using namespace std;
-#define ll long long
-int const MAX5 = 100000, MAX6 = 1000000;
- 
-//printf("%.10lf\n",ans);
-//cout<<fixed<<setprecision(20)<<ans<<endl;
-//stoll string -> long long
- 
- 
-/*
-*/
-int vis[1001][1001];
-int n, m;
- 
-bool isMonster(int x, int y, string grid[]){
-  return grid[x][y] == 'M';
+
+int N, M;
+queue<pii> q;
+int paths[mn][mn];
+pii from[mn][mn];
+int oo = INT_MAX;
+pii A;
+string ans;
+bool possible = false;
+
+void retrace(pii node) {  // retrace from final node, adding direction from
+	                      // previous node to a string. This string will be
+	                      // backwards but will be reversed before output.
+	pii origin = from[node.first][node.second];
+	if (origin == pii(0, 0)) return;
+	if (origin.first == node.first + 1) ans.push_back('U');
+	if (origin.first == node.first - 1) ans.push_back('D');
+	if (origin.second == node.second + 1) ans.push_back('L');
+	if (origin.second == node.second - 1) ans.push_back('R');
+	retrace(origin);
 }
-
-bool isFloor(int x, int y, string grid[]){
-  return grid[x][y] == '.';
+void check(pii origin,
+           pii dest) {  // check if the considered destination may be traveled to
+	int pl = paths[origin.first][origin.second];
+	if (pl + 1 < paths[dest.first][dest.second]) {
+		paths[dest.first][dest.second] = pl + 1;
+		q.push(dest);
+		from[dest.first][dest.second] = origin;
+	}
 }
- 
-
-void solve(){
-  cin >> n >> m;
-  string grid[n];
-  for(int i = 0; i < n; i++)
-    cin >> grid[i];
- 
-  int d[n][m];
-  memset(d, -1, sizeof(d));
-  char pred[n][m];
-  queue<pair<int, int>> q;
-  vector<pair<int,int>> monsters;
-  pair<int, int> start, end;
-
-  for(int i = 0; i < n; i++){
-    for(int j = 0; j < m; j++){
-      if(grid[i][j] == 'A'){
-        start = {i, j};
-      }
-      if(grid[i][j] == 'M'){
-        monsters.pb({i, j});
-      }
-    }
-  }
-
-  int cnt_monsters = monsters.size();
- 
-  q.push(start);
-  d[start.F][start.S] = 0;
-  pair<int, int> moves[4] = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
-  char ch_moves[4] = {'R', 'D', 'U', 'L'};
-  int x, y;
-  int monsters_in_q = 0;
-  while(!q.empty()){
-    pair<int, int> curr = q.front();
-    x = curr.F;
-    y = curr.S;
-    q.pop();
-    for(int i = 0; i < 4; i++){
-      int dx = moves[i].F;
-      int dy = moves[i].S;
-      if(x + dx >= 0 && x + dx < n && y + dy >= 0 && y + dy < m && (isFloor(x + dx, y + dy, grid) || grid[x+dx][y+dy] == 'M') && !vis[x+dx][y+dy]){
-        if(!isMonster(x+dx, y+dy, grid))
-          q.push({x+dx, y+dy});
-        vis[x+dx][y+dy] = 1;
-        d[x+dx][y+dy] = d[x][y] + 1;
-        //if(x+dx == n-1 or y+dy == m-1 or x+dx == 0 or y+dy == 0)
-        pred[x+dx][y+dy] = ch_moves[i];
-      }
-    }
-  }
-
-  bool good = false;
-  int ans;
-  for(int i = 0; i < n && !good; i++){
-    if(d[i][0] != -1){
-      end = {i, 0};
-      ans = d[i][0];
-      good = true;
-    } 
-    if(d[i][m-1] !=-1){
-      end = {i, m-1};
-      ans = d[i][m-1];
-      good = true;
-    }
-  }
-  for(int j = 0; j < m && !good; j++){
-    if(d[0][j] != -1){
-      end = {0, j};
-      ans = d[0][j];
-      good = true;
-    }
-    if(d[n-1][j] != -1){
-      end = {n-1, j};
-      ans = d[n-1][j];
-      good = true;
-    }
-  }
-  if(!good){
-    cout << "NO" << endl;
-    return;
-  }
-
-  vector<char> path;
-  int currx = end.F, curry = end.S;
-  for(int i = 0; i < ans; i++){
-    path.pb(pred[currx][curry]);
-    if(pred[currx][curry] == 'L'){
-      curry++;
-    }
-    else if(pred[currx][curry] == 'R'){
-      curry--;
-    }
-    else if(pred[currx][curry] == 'U'){
-      currx++;
-    }
-    else{
-      currx--;
-    }
-  } 
-  cout << "YES" << endl;
-  cout << ans << endl;
-  // cout << path.size() << endl;
-  for(int i = ans-1; i >= 0; i--) cout << path[i];
-  cout << endl; 
+bool mora = false;  // false if bfs for monsters, true if bfs for A
+void bfs() {
+	while (!q.empty()) {
+		pii loc = q.front(), next;
+		q.pop();
+		next = loc;
+		next.first++;
+		check(loc, next);  // go through adjacent locations
+		next = loc;
+		next.first--;
+		check(loc, next);
+		next = loc;
+		next.second++;
+		check(loc, next);
+		next = loc;
+		next.second--;
+		check(loc, next);
+		if (mora &&
+		    (loc.first == 1 || loc.second == 1 || loc.first == N || loc.second == M)) {
+			cout << "YES" << endl;
+			cout << paths[loc.first][loc.second] << endl;
+			retrace(loc);
+			possible = true;
+			return;
+		}
+	}
 }
- 
-int main(){
-  // in & out files
-  /*
-  freopen("outofplace.in", "r", stdin);
-  freopen("outofplace.out", "w", stdout);
-*/
-  // fast and furious io
-  ios_base::sync_with_stdio(false);
-  cin.tie(0);
-  cout.tie(0);
- 
-// testcases
-  int t = 1; // cin >> t;
-  while(t--){
-    solve();
-  }
-  return 0;
- 
+int main() {
+	cin >> N >> M;
+	for (int i = 1; i <= N; i++) {
+		string s;
+		cin >> s;
+		for (int j = 1; j <= M; j++) {
+			paths[i][j] = oo;
+			if (s[j - 1] == '#') paths[i][j] = 0;
+			if (s[j - 1] == 'M') {
+				q.push(pii(i, j));
+				paths[i][j] = 0;
+			}
+			if (s[j - 1] == 'A') {
+				A.first = i;
+				A.second = j;
+			}
+		}
+	}
+	bfs();                                // monster bfs
+	mora = true;                          // change next bfs to A bfs
+	from[A.first][A.second] = pii(0, 0);  // give the retrace a terminating location
+	paths[A.first][A.second] = 0;
+	q.push(A);  // get ready for next bfs
+	bfs();      // bfs with A
+	if (possible) {
+		reverse(ans.begin(), ans.end());
+		cout << ans << endl;
+	} else cout << "NO" << endl;
 }
