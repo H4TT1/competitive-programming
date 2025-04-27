@@ -20,6 +20,7 @@ int const MAX5 = 100000, MAX6 = 1000000;
 //cout<<fixed<<setprecision(20)<<ans<<endl;
 //stoll string -> long long
 /*
+HZLLO WORLZ
 */
 vector<int> adj[MAX5 + 1];
 int visited[MAX5 + 1];
