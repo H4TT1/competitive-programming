@@ -21,14 +21,7 @@ int const MAX5 = 100000, MAX6 = 1000000;
 //stoll string -> long long
  
  
-/*
-  10110 => 11001
-        => 00101
-  01010 => 00101
- 
-  answer <= n
- 
-  if we perform k operations 
+/* 
 */
 int vis[1001][1001];
 int n, m;
