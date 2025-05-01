@@ -26,7 +26,15 @@ int const MAX5 = 100000, MAX6 = 1000000;
 
 const ll INF = 10000000000000;
 vector<vector<pair<int, int>>> adj(100001);
+
+struct myInt{
+  ll i = -1;
+};
+
+map<pair<int,int>, myInt> ans;
 int n;
+
+
 
 
 bool spfa(int s, vector<ll>& d) {
@@ -45,11 +53,12 @@ bool spfa(int s, vector<ll>& d) {
 
         for (auto edge : adj[v]) {
             int to = edge.first;
-            int len = edge.second;
+            ll len = edge.second;
 
             if (d[v] + len < d[to]) {
                 // cout << d[v] + len << " lmml" << d[to] << endl; 
                 d[to] = d[v] + len;
+                ans[{s, to}].i = d[to];
                 if (!inqueue[to]) {
                     q.push(to);
                     inqueue[to] = true;
@@ -63,10 +72,22 @@ bool spfa(int s, vector<ll>& d) {
     return true;
 }
 
-int query(int a, int b){
+ll query(int a, int b){
   vector<ll> d;
+  ll answer = -1;
+  if(ans[{a, b}].i != -1) answer = (answer == -1 ? ans[{a, b}].i : min(answer, ans[{a, b}].i));
+  if(ans[{b, a}].i != -1) answer = (answer == -1 ? ans[{b, a}].i : min(answer, ans[{b, a}].i));
+  if(answer != -1){
+    assert(answer >= 0);
+    //cout << "returned " << answer << endl;
+    //cout << answer << endl;
+    return answer;
+  }
   spfa(a, d);
-  return d[b] == INF ? -1 : d[b];
+
+  assert((ans[{a, b}].i) >= -1);
+
+  return ans[{a, b}].i;
 }
 
 void solve(){
@@ -79,10 +100,8 @@ void solve(){
 
   for(int i = 0; i < q; i++){
     int a, b; cin >> a >> b;
-    cout << query(a, b) << endl;
+    cout << (a == b ? 0 : query(a, b)) << endl;
   }
-
-
 
 }
  
