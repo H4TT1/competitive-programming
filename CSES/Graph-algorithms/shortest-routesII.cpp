@@ -18,9 +18,7 @@ int const MAX5 = 100000, MAX6 = 1000000;
  
 //printf("%.10lf\n",ans);
 //cout<<fixed<<setprecision(20)<<ans<<endl;
-//stoll string -> long long
- 
- 
+//stoll string -> long long 
 /*
 */
 
