@@ -53,6 +53,8 @@ void solve()
       }
     // cout << "x after " << i+1 << " = " << x << endl;
   }
+
+  
   cout << ((x != -1) ? -1 : -d[n])<< endl;
 }
  
