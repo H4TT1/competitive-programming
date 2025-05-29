@@ -1,79 +1,65 @@
 #include <bits/stdc++.h>
- 
-#define F first
-#define S second
-#define pb push_back
-#define pf push_front
-#define popf pop_front
-#define popb pop_back
-#define MOD 1000000007
-#define MOD2 998244353
-#define vi vector<int>
-#define vii vector<pair<int,int>>
-#define pi pair<int,int>
- 
+
 using namespace std;
-#define ll long long
-int const MAX5 = 100000, MAX6 = 1000000;
- 
-//printf("%.10lf\n",ans);
-//cout<<fixed<<setprecision(20)<<ans<<endl;
-//stoll string -> long long
- 
- 
-/*
-*/
+typedef long long ll;
+const int maxN = 2501;
+const int maxM = 5001;
+const ll INF = 0x3f3f3f3f3f3f3f3f;
+
 struct Edge {
-  int a, b, cost;
-};
+    int a, b; ll c;
+} edges[maxM];
 
-vector<Edge> edges;
-const int INF = 1000000000;
+int N, M;
+ll dp[maxN];
+bool vis[maxN], visR[maxN];
+vector<int> G[maxN], GR[maxN];
 
-void solve()
-{
-  int n, m; cin >> n >> m;
-  for(int i = 0; i < n; i++){
-    int a, b, x; cin >> a >> b >> x;
-    struct Edge e = {.a = a, .b = b, .cost = -x};
-    edges.pb(e);
-  }
-  vector<int> d(n + 1, INF);
-  d[1] = 0;
-  // Bellman-Ford + if there is a relaxation at n-th phase => negative cycle
-  int x;
-  for (int i = 0; i < n; ++i){
-    x = -1;
-    for (Edge e : edges)
-        if (d[e.a] < INF){
-          if (d[e.b] > d[e.a] + e.cost) {
-            d[e.b] = max(-INF, d[e.a] + e.cost);
-            x = e.b;
-        }
-      }
-    // cout << "x after " << i+1 << " = " << x << endl;
-  }
-
-  
-  cout << ((x != -1) ? -1 : -d[n])<< endl;
+void dfs(int u){
+    vis[u] = true;
+    for(int v : G[u])
+        if(!vis[v])
+            dfs(v);
 }
- 
+
+void dfsR(int u){
+    visR[u] = true;
+    for(int v : GR[u])
+        if(!visR[v])
+            dfsR(v);
+}
+
 int main(){
-  // in & out files
-  /*
-  freopen("outofplace.in", "r", stdin);
-  freopen("outofplace.out", "w", stdout);
-*/
-  // fast and furious io
-  ios_base::sync_with_stdio(false);
-  cin.tie(0);
-  cout.tie(0);
- 
-// testcases
-  int t = 1; // cin >> t;
-  while(t--){
-    solve();
-  }
-  return 0;
- 
+    scanf("%d %d", &N, &M);
+    for(int i = 0, a, b; i < M; i++){
+        ll c;
+        scanf("%d %d %lld", &a, &b, &c);
+        edges[i] = {a, b, -c};
+        G[a].push_back(b);
+        GR[b].push_back(a);
+    }
+    dfs(1); dfsR(N);
+
+    fill(dp+2, dp+N+1, INF);
+    bool improvement = true;
+    for(int iter = 0; iter < N && improvement; iter++){
+        improvement = false;
+        for(int i = 0; i < M; i++){
+            int u = edges[i].a;
+            int v = edges[i].b;
+            ll w = edges[i].c;
+
+            if(dp[v] > dp[u]+w){
+                dp[v] = dp[u]+w;
+                improvement = true;
+
+                if(iter == N-1 && vis[v] && visR[v]){
+                    printf("-1\n");
+                    return 0;
+                }
+            }
+        }
+    }
+
+    printf("%lld\n", -dp[N]);
 }
