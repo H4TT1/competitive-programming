@@ -24,34 +24,14 @@ int const MAX5 = 100000, MAX6 = 1000000;
 /*
 */
 
-void print_set(set<int> s){
-  for(auto sa : s) cout << sa << " ";
-  cout << endl;
-}
-
 void solve()
 {
-  int n; cin >> n;
-  int a[n], b[n];
-  for(int i = 0; i < n; i++) cin >> a[i];
-  for(int i = 0; i < n; i++) cin >> b[i];
+  /*
+    To implement later :
+    idea 1  : DSU (sorting by edge weights and then uniting greedily the nodes until 1 and n are connected)
+    idea 2  : Dijkstra usnig the idea proposed in CF
+  */
 
-  if(a[n - 1] == b[n - 1]){
-    cout << n << endl;
-    return;
-  }
-
-  vector<bool> seen(n+1);
-  int ans = -1;
-    for(int i = n - 2; i >= 0; i--) {
-        if(a[i] == b[i] || a[i] == a[i + 1] || b[i] == b[i + 1] || seen[a[i]] || seen[b[i]]) {
-            ans = i;
-            break;
-        }
-        seen[a[i + 1]] = seen[b[i + 1]] = true;
-    }
-
-  cout << ans + 1 << endl;
 }
  
 int main(){
