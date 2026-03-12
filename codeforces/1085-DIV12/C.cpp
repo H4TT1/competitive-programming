@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+ 
+#define F first
+#define S second
+#define pb push_back
+#define pf push_front
+#define popf pop_front
+#define popb pop_back
+#define MOD 1000000007
+#define MOD2 998244353
+#define WTFMOD 676767677
+#define vi vector<int>
+#define vii vector<pair<int,int>>
+#define pi pair<int,int>
+ 
+using namespace std;
+#define ll long long
+int const MAX5 = 100000, MAX6 = 1000000, MAXN = 1000000000;
+ 
+//printf("%.10lf\n",ans);
+//cout<<fixed<<setprecision(20)<<ans<<endl;
+//stoll string -> long long
+
+
+
+void solve(){
+  int n, h; cin >> n >> h;
+  int a[n];
+  for(int i = 0; i < n; i++) cin >> a[i];
+  ll cnt[n];
+  map<pair<int, int>, int> m;
+  for(int i = 0; i < n; i++){
+    cnt[i] = h - a[i];
+    ll k = a[i];
+    int idxk = i;
+    for(int j = i+1; j < n; j++){
+      if(a[j] > k) k = a[j], idxk = j;
+      m[{i, j}] = idxk;
+      cnt[i] += h - k;
+    }
+
+    k = a[i];
+    idxk = i;
+    for(int j = i-1; j >= 0; j--){
+      if(a[j] > k) k = a[j], idxk = j;
+      m[{j, i}] = idxk;
+      cnt[i] += h - k;
+    }
+  }
+
+  // for(int i = 0; i < n; i++) cout << cnt[i] << " ";
+  // cout << endl;
+  ll ans = 0;
+  for(int i = 0; i < n; i++){
+    for(int j = i+1; j < n; j++){
+      ans = max(ans, cnt[i] + cnt[j] - cnt[m[{i, j}]]);
+    }
+  }
+  if(n > 1)
+    cout << ans << endl;
+  else
+    cout << h - a[0] << endl;
+  /*
+
+  */
+
+  
+}
+ 
+int main(){
+  // in & out files
+  /*
+  freopen("outofplace.in", "r", stdin);
+  freopen("outofplace.out", "w", stdout);
+*/
+  // fast and furious io
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+
+// testcases
+  int t = 1;  cin >> t;
+  while(t--){
+    solve();
+  }
+  return 0;
+ 
+}
